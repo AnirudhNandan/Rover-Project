@@ -49,7 +49,7 @@ rock_map = find_rocks(warped, levels=(110, 110, 50))
 ```
 ### 2. Creating process_image( ) function:
 
-This function converts raw images to perspective transformed images and identifies navigable terrain, obstacles, and rock samples. This function also maps navigable terrain, obstacles, and rock samples in world map. Output video included in repo.
+This function converts raw images to perspective transformed images and identifies navigable terrain, obstacles, and rock samples. This function also maps navigable terrain, obstacles, and rock samples in world map. Output video test_mapping.mp4 included in this repo.
 
 Code:
 ```python
