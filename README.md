@@ -47,6 +47,11 @@ def find_rocks(img, levels=(110,110,50)):
     
 rock_map = find_rocks(warped, levels=(110, 110, 50))
 ```
+
+Result:
+
+![5](https://user-images.githubusercontent.com/7349926/34483025-fb9fce6a-ef89-11e7-809e-5029ad755f38.png)
+
 ### 2. Creating process_image( ) function:
 
 This function converts raw images to perspective transformed images and identifies navigable terrain, obstacles, and rock samples. This function also maps navigable terrain, obstacles, and rock samples in world map. Output video test_mapping.mp4 included in this repo.
@@ -118,13 +123,16 @@ def process_image(img):
 Results:
 
 Perspective transform:
-![1](https://user-images.githubusercontent.com/7349926/34482669-7b0b34da-ef87-11e7-803e-b1bae65aef0c.png)
 
-![2](https://user-images.githubusercontent.com/7349926/34482693-ab8f74a4-ef87-11e7-9cb8-299772550db3.png)
+![1](https://user-images.githubusercontent.com/7349926/34483045-245c374e-ef8a-11e7-95d8-bb9b1fdce6a9.png)
+![2](https://user-images.githubusercontent.com/7349926/34483056-33819a70-ef8a-11e7-885a-75fbf43eaae1.png)
 Colour thresholding:
-![3](https://user-images.githubusercontent.com/7349926/34482702-b65ca1ae-ef87-11e7-9183-009459cb8f47.png)
+
+![3](https://user-images.githubusercontent.com/7349926/34483064-3e1fc8e4-ef8a-11e7-89d0-d808cf3780a1.png)
 Navigation angle calculation:
-![4](https://user-images.githubusercontent.com/7349926/34482713-bf916b2e-ef87-11e7-8fca-134be59bd410.png)
+
+![4](https://user-images.githubusercontent.com/7349926/34483067-47962472-ef8a-11e7-940f-87d043bdbf80.png)
+
 ### Autonomous Navigation and Mapping:
 
 #### perception_step( ) function:
