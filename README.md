@@ -1,5 +1,5 @@
 # Project: Search and Sample Return
-
+Code obtained from walkthrough video.
 ## Notebook Analysis:
 
 ### 1. Creating function for colour selection of obstacles and rock samples:
@@ -126,9 +126,11 @@ Perspective transform:
 
 ![1](https://user-images.githubusercontent.com/7349926/34483045-245c374e-ef8a-11e7-95d8-bb9b1fdce6a9.png)
 ![2](https://user-images.githubusercontent.com/7349926/34483056-33819a70-ef8a-11e7-885a-75fbf43eaae1.png)
+
 Colour thresholding:
 
 ![3](https://user-images.githubusercontent.com/7349926/34483064-3e1fc8e4-ef8a-11e7-89d0-d808cf3780a1.png)
+
 Navigation angle calculation:
 
 ![4](https://user-images.githubusercontent.com/7349926/34483067-47962472-ef8a-11e7-940f-87d043bdbf80.png)
