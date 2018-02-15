@@ -56,16 +56,29 @@ Result:
 
 This function converts raw images to perspective transformed images and identifies navigable terrain, obstacles, and rock samples. This function also maps navigable terrain, obstacles, and rock samples in world map. Output video test_mapping.mp4 included in this repo.
 
-Code:
+#### Step 1:
+The raw camera image first passes through a perspective transform function. It converts the ground level front facing camera image to as if it was shot from the sky. This helps the rover to develope a map of the terrain.
 ```python
-def process_image(img):
-    # Perspective Transform and mask
+# Perspective Transform and mask
     warped, mask = perspect_transform(img, source, destination)
-    # Apply color threshold to identify navigable terrain/obstacles/rock samples
+```
+
+#### Step 2:
+The result of perspective transform is passed through a colour thresholding function. It helps in differentiating obstacles from navigable terrain. Colour selection criteria was shown above.
+```python
+# Apply color threshold to identify navigable terrain/obstacles/rock samples
     threshed = color_thresh(warped)
-    # Create obstacle map
+```
+#### Step 3:
+The inverse of navigable terrain is the obstacle. That fact is used to develope an obstacle map.
+```python
+# Create obstacle map
     obs_map = np.absolute(np.float32(threshed) - 1) * mask
-    # Create rover based co-ordinate map
+```
+#### Step 4: 
+Rover coordinates based map is first created. Then it is transformed to world coordinates to form a "world map" of the terrain. Simillarly, a "world map" of the obstacles is also created.
+```python
+# Create rover based co-ordinate map
     xpix, ypix = rover_coords(threshed)
     
     world_size = data.worldmap.shape[0]
@@ -85,42 +98,22 @@ def process_image(img):
     data.worldmap[obs_y_world, obs_x_world, 0] = 255
     nav_pix = data.worldmap[:,:,2] > 0
     data.worldmap[nav_pix, 0] = 0
-    # See if we can find some rocks
+ ```
+#### Step 5:
+Using rock colour selection criteria, the code tries to spot rocks and map it on the "world map".
+```python
+# See if we can find some rocks
     rock_map = find_rocks(warped, levels=(110, 110, 50))
     if rock_map.any():
         rock_x, rock_y = rover_coords(rock_map)
         rock_x_world, rock_y_world = pix_to_world(rock_x, rock_y, xpos,
                                                   ypos, yaw, world_size, scale)
         data.worldmap[rock_y_world, rock_x_world, :] = 255
-        
-    # 7) Make a mosaic image, below is some example code
-        # First create a blank image (can be whatever shape you like)
-    output_image = np.zeros((img.shape[0] + data.worldmap.shape[0], img.shape[1]*2, 3))
-        # Next you can populate regions of the image with various output
-        # Here I'm putting the original image in the upper left hand corner
-    output_image[0:img.shape[0], 0:img.shape[1]] = img
-
-        # Let's create more images to add to the mosaic, first a warped image
-    #warped = perspect_transform(img, source, destination)
-        # Add the warped image in the upper right hand corner
-    output_image[0:img.shape[0], img.shape[1]:] = warped
-
-        # Overlay worldmap with ground truth map
-    map_add = cv2.addWeighted(data.worldmap, 1, data.ground_truth, 0.5, 0)
-        # Flip map overlay so y-axis points upward and add to output_image 
-    output_image[img.shape[0]:, 0:data.worldmap.shape[1]] = np.flipud(map_add)
-
-
-        # Then putting some text over the image
-    cv2.putText(output_image,"Populate this image with your analyses to make a video!", (20, 20), 
-                cv2.FONT_HERSHEY_COMPLEX, 0.4, (255, 255, 255), 1)
-    if data.count < len(data.images) - 1:
-        data.count += 1 # Keep track of the index in the Databucket()
-    
-    return output_image
 ```
+#### Step 6:
+Various plots are made in this section. A "world map" which is overlayed on ground truth is plotted. It helps us in visually assessing the acuracy of the results.
 
-Results:
+### Results:
 
 Perspective transform:
 
@@ -138,7 +131,17 @@ Navigation angle calculation:
 ### Autonomous Navigation and Mapping:
 
 #### perception_step( ) function:
-The function perception_step( ) is filled in to work on Rover object of class RoverState( ). This function first perform perspective transform, then performs colour thresholding, updates Rover.vision_image, converts map image pixel values to rover-centric coordinates, converts rover centric pixel values to world coordinates, updates Rover worldmap, converts rover centric pixel positions to polar coordinates, updates Rover navigation angles, and plots rock positions.
+The function perception_step( ) is filled in to work on Rover object of class RoverState( ). 
+
+#### Step 1:
+This function first perform perspective transform, then performs colour thresholding, 
+#### Step 2:
+Updates Rover.vision_image, converts map image pixel values to rover-centric coordinates, converts rover centric pixel values to world coordinates, updates Rover worldmap, 
+#### Step 3:
+Direction of navigation is calculated here.
+Converts rover centric pixel positions to polar coordinates, updates Rover navigation angles
+#### Step 4:
+Rock positions are plotted on the world map as and when they are discovered.
 
 Code:
 ```python
